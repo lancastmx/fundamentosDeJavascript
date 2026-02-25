@@ -1,0 +1,18 @@
+# --- 1. GUARDAR CAMBIOS ---
+git add .
+git commit -m "feat: completar clase actual"
+
+# --- 2. INTEGRAR EN DEV ---
+git checkout dev
+git merge -
+
+# --- 3. LIMPIAR MAIN ---
+git checkout main
+git rebase dev
+
+# --- 4. SUBIR A LA NUBE ---
+git push origin dev
+git push origin main
+
+# --- 5. REGRESAR A TRABAJAR ---
+git checkout dev
