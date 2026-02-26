@@ -97,7 +97,7 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "docs: agrega descripción clara del cambio"
+git commit -m "docs: agrega webflow"
 
 git checkout dev
 git merge nombre-de-la-rama --no-ff
