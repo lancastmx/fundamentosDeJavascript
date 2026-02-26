@@ -97,14 +97,13 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "docs: agrega webflow"
+git commit -m "docs: ajuste de flujo en GITflOW"
 
 git checkout dev
-git merge nombre-de-la-rama --no-ff
+git merge nombre-de-la-rama --no-ff -m "merge: "
 
 git checkout main
 git rebase dev
 
-git branch -d nombre-de-la-rama
 git checkout dev
 ```
