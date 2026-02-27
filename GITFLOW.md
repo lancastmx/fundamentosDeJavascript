@@ -111,12 +111,11 @@ git checkout dev
 ```bash
 git add .
 git commit -m "docs: add readme roadmap sprint planing"
-
 git checkout dev
 git merge feature/arq-hexagonal --no-ff -m "merge:docs: add readme roadmap sprint planing "
-
+git push
 git checkout main
 git rebase dev
-
+git push
 git checkout dev
 ```
