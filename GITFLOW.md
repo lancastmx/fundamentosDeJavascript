@@ -97,10 +97,10 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "docs: ajuste de flujo en GITflOW"
+git commit -m "docs: add readme roadmap sprint planing"
 
 git checkout dev
-git merge nombre-de-la-rama --no-ff -m "merge: "
+git merge nombre-de-la-rama --no-ff -m "merge:docs: add readme roadmap sprint planing "
 
 git checkout main
 git rebase dev
