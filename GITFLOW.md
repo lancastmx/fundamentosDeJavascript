@@ -110,12 +110,18 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "docs: add readme roadmap sprint planing"
+git commit -m "chore: configurar entorno TypeScript, paths alias y calidad de código"
 git checkout dev
-git merge feature/arq-hexagonal --no-ff -m "merge:docs: add readme roadmap sprint planing "
+git merge feature/setup-typescript --no-ff -m "chore: configurar entorno TypeScript, paths alias y calidad de código"
 git push
 git checkout main
 git rebase dev
 git push
 git checkout dev
 ```
+
+$ find . -type f \
+ ! -path "_/node_modules/_" \
+ ! -path "_/.git/_" \
+ ! -path "_/.husky/_" \
+ | sort
