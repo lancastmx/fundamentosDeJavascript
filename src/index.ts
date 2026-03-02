@@ -1,21 +1,27 @@
-import os from 'node:os';
+import { User } from './modules/user/domain/user.entity.js';
+import { Organization } from './modules/organization/domain/organization.entity.js';
+import { Membership } from './modules/organization/domain/membership.entity.js';
 
-/**
- * Prueba de concepto: Sprint 2 - Core Domain
- * Validando entorno ESM y TSX
- */
-const startApp = () => {
-  const user = os.userInfo().username;
-  const platform = os.platform();
+async function bootstrap() {
+  console.log("ðŸš€ Validando Sprint 2: Core Domain & Multi-tenancy\n");
 
-  console.log("---------------------------------------");
-  console.log("íº€ Â¡Hola Mundo desde TypeScript!");
-  console.log("---------------------------------------");
-  console.log(`í±¤ Usuario detectado: ${user}`);
-  console.log(`í²» Plataforma: ${platform}`);
-  console.log(`âœ… Entorno ESM: Activo`);
-  console.log(`í³¦ Status: Listo para el Sprint 2`);
-  console.log("---------------------------------------");
-};
+  // 1. Instanciar Usuario (Estado Inicial: PENDING)
+  const user = new User("u-123", "lanca@kyclops.com", "hash_seguro_abc");
+  console.log(`[User] Estado inicial: ${user.getStateName()}`);
 
-startApp();
+  // 2. Activar Usuario mediante State Pattern
+  user.activate();
+  console.log(`[User] Estado actual: ${user.getStateName()}`);
+
+  // 3. Crear OrganizaciÃ³n y Vincular Usuario
+  const org = new Organization("o-456", "Kyclops Studio", user.id);
+  const membership = new Membership(user.id, org.id, "ROLE_OWNER");
+
+  console.log(`[Org] OrganizaciÃ³n creada: ${org.name}`);
+  console.log(`[Membership] Usuario vinculado con rol: ${membership.roleId}`);
+  
+  console.log("\nâœ… Sprint 2 validado con Ã©xito.");
+  console.log("PrÃ³ximo paso: Implementar RBAC en el Sprint 3.");
+}
+
+bootstrap();
