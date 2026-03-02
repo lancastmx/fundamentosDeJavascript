@@ -110,9 +110,9 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "chore: configurar entorno TypeScript, paths alias y calidad de código"
+git commit -m "feat: completar dominio base, soporte multi-tenant y state pattern"
 git checkout dev
-git merge feature/setup-typescript --no-ff -m "chore: configurar entorno TypeScript, paths alias y calidad de código"
+git merge feature/sprint-2-user-domain-state-pattern --no-ff -m "feat: completar dominio base, soporte multi-tenant y state pattern"
 git push
 git checkout main
 git rebase dev
