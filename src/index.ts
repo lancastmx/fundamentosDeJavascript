@@ -1,37 +1,27 @@
-import { RegisterUserUseCase } from './modules/user/application/register-user.use-case.js';
-import { LoginUserUseCase } from './modules/user/application/login-user.use-case.js';
+import { RbacService } from './modules/organization/domain/services/rbac.service.js';
+import { SYSTEM_ROLES, PERMISSIONS } from './modules/organization/domain/role-list.constants.js';
 
-async function bootstrap() {
-  console.log("🚀 KYCLOPS OAUTH2 FLOW: REGISTRO Y LOGIN\n");
+async function testRBAC() {
+  console.log("🛡️ PRUEBA DE JERARQUÍA RBAC - KYCLOPS\n");
 
-  const register = new RegisterUserUseCase();
-  const login = new LoginUserUseCase();
+  const rbac = new RbacService();
+  const userRole = 'OWNER'; // Simulamos un usuario con rol OWNER
 
-  try {
-    // 1. REGISTRO (Creación de cuenta y empresa)
-    const regResult = await register.execute({
-      email: "lanca@kyclops.com",
-      passwordHash: "hash_seguro",
-      orgName: "Kyclops Studio"
-    });
-    console.log(`✅ Registro OK: Org "${regResult.organization.name}" creada.`);
+  // 1. Verificación de permiso DIRECTO
+  const canDelete = rbac.hasPermission(userRole, PERMISSIONS.DELETE_ORG.id, SYSTEM_ROLES);
+  
+  // 2. Verificación de permiso HEREDADO (del nivel más bajo: SELLER)
+  const canUpdateProfile = rbac.hasPermission(userRole, PERMISSIONS.UPDATE_PROFILE.id, SYSTEM_ROLES);
 
-    // 2. LOGIN (Obtención de Tokens)
-    const auth = await login.execute({
-      email: "lanca@kyclops.com",
-      passwordRaw: "password123"
-    });
+  console.log(`Rol Evaluado: ${userRole}`);
+  console.log(`---------------------------`);
+  console.log(`¿Puede eliminar la Org? (Directo): ${canDelete ? '✅ SÍ' : '❌ NO'}`);
+  console.log(`¿Puede editar su perfil? (Heredado de SELLER): ${canUpdateProfile ? '✅ SÍ' : '❌ NO'}`);
 
-    console.log("\n🔑 TOKENS GENERADOS (OAuth2):");
-    console.log(` > AccessToken (JWT): ${auth.accessToken.substring(0, 20)}...`);
-    console.log(` > RefreshToken: ${auth.refreshToken}`);
-    console.log(` > Expira en: ${auth.expiresIn} segundos`);
-
-    console.log("\n✅ Flujo de Identidad completado con éxito.");
-
-  } catch (error: any) {
-    console.error("❌ Error en el flujo:", error.message);
-  }
+  // 3. Listado total de autoridad
+  const allPerms = rbac.getPermissionsForRole(userRole, SYSTEM_ROLES);
+  console.log(`\nLista total de permisos para ${userRole}:`);
+  console.log(allPerms.map(p => ` > ${p}`).join('\n'));
 }
 
-bootstrap();
+testRBAC();
