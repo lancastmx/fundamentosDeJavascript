@@ -19,10 +19,13 @@ export class Invitation {
    * REGLAS DE NEGOCIO
    */
   public accept(): void {
-    if (this.isExpired()) throw new Error("La invitación ha expirado.");
-    if (this._status !== 'PENDING') throw new Error("La invitación ya no es válida.");
-    this._status = 'ACCEPTED';
+  if (this.isExpired()) {
+    this._status = 'EXPIRED'; // <--- Cambiamos el estado internamente
+    throw new Error("EXPIRED_INVITATION"); // <--- Lanzamos un código de error claro
   }
+  if (this._status !== 'PENDING') throw new Error("INVALID_INVITATION");
+  this._status = 'ACCEPTED';
+}
 
   public isExpired(): boolean {
     return new Date() > this.expiresAt;
