@@ -1,27 +1,37 @@
-import { User } from './modules/user/domain/user.entity.js';
-import { Organization } from './modules/organization/domain/organization.entity.js';
-import { Membership } from './modules/organization/domain/membership.entity.js';
+import { RegisterUserUseCase } from './modules/user/application/register-user.use-case.js';
+import { LoginUserUseCase } from './modules/user/application/login-user.use-case.js';
 
 async function bootstrap() {
-  console.log("🚀 Validando Sprint 2: Core Domain & Multi-tenancy\n");
+  console.log("🚀 KYCLOPS OAUTH2 FLOW: REGISTRO Y LOGIN\n");
 
-  // 1. Instanciar Usuario (Estado Inicial: PENDING)
-  const user = new User("u-123", "lanca@kyclops.com", "hash_seguro_abc");
-  console.log(`[User] Estado inicial: ${user.getStateName()}`);
+  const register = new RegisterUserUseCase();
+  const login = new LoginUserUseCase();
 
-  // 2. Activar Usuario mediante State Pattern
-  user.activate();
-  console.log(`[User] Estado actual: ${user.getStateName()}`);
+  try {
+    // 1. REGISTRO (Creación de cuenta y empresa)
+    const regResult = await register.execute({
+      email: "lanca@kyclops.com",
+      passwordHash: "hash_seguro",
+      orgName: "Kyclops Studio"
+    });
+    console.log(`✅ Registro OK: Org "${regResult.organization.name}" creada.`);
 
-  // 3. Crear Organización y Vincular Usuario
-  const org = new Organization("o-456", "Kyclops Studio", user.id);
-  const membership = new Membership(user.id, org.id, "ROLE_OWNER");
+    // 2. LOGIN (Obtención de Tokens)
+    const auth = await login.execute({
+      email: "lanca@kyclops.com",
+      passwordRaw: "password123"
+    });
 
-  console.log(`[Org] Organización creada: ${org.name}`);
-  console.log(`[Membership] Usuario vinculado con rol: ${membership.roleId}`);
-  
-  console.log("\n✅ Sprint 2 validado con éxito.");
-  console.log("Próximo paso: Implementar RBAC en el Sprint 3.");
+    console.log("\n🔑 TOKENS GENERADOS (OAuth2):");
+    console.log(` > AccessToken (JWT): ${auth.accessToken.substring(0, 20)}...`);
+    console.log(` > RefreshToken: ${auth.refreshToken}`);
+    console.log(` > Expira en: ${auth.expiresIn} segundos`);
+
+    console.log("\n✅ Flujo de Identidad completado con éxito.");
+
+  } catch (error: any) {
+    console.error("❌ Error en el flujo:", error.message);
+  }
 }
 
 bootstrap();

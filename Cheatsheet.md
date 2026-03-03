@@ -21,6 +21,7 @@ $ find . -type f ! -path "_/node_modules/_" ! -path "_/.git/_" ! -path "_/.husky
 
 ```
 // find . -maxdepth 4 -not -path '*/.*' -not -path './node_modules*' -not -path './dist*'
+// find . -maxdepth 4 -not -path '*/.*' -not -path './node_modules*' -not -path './dist*'   -exec ls -lh {} \;
 ```
 
 .

@@ -4,4 +4,5 @@ export interface UserState {
   getName(): string;
   activate(user: User): void;
   suspend(user: User): void;
+  changeEmail(user: User, newEmail: string): void;
 }
