@@ -110,9 +110,9 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "feat:muchisimos cambios"
+git commit -m "feat: implement mongodb persistence with encrypted password and user profile"
 git checkout dev
-git merge feature/refactor-sprint-2-core-domain --no-ff -m "feat:muchisimos cambios"
+git merge feature/sprint-4-mongodb-persistence --no-ff -m "feat: implement mongodb persistence with encrypted password and user profiles"
 git push
 git checkout main
 git rebase dev
