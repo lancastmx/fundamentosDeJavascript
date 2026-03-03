@@ -110,9 +110,9 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "feat: completar dominio base, soporte multi-tenant y state pattern"
+git commit -m "feat:muchisimos cambios"
 git checkout dev
-git merge feature/sprint-2-user-domain-state-pattern --no-ff -m "feat: completar dominio base, soporte multi-tenant y state pattern"
+git merge feature/refactor-sprint-2-core-domain --no-ff -m "feat:muchisimos cambios"
 git push
 git checkout main
 git rebase dev

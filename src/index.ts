@@ -1,5 +1,6 @@
 import { RbacService } from './modules/organization/domain/services/rbac.service.js';
 import { SYSTEM_ROLES, PERMISSIONS } from './modules/organization/domain/role-list.constants.js';
+import { logger } from './modules/shared/infrastructure/logger.js';
 
 async function testRBAC() {
   console.log("🛡️ PRUEBA DE JERARQUÍA RBAC - KYCLOPS\n");
@@ -22,6 +23,7 @@ async function testRBAC() {
   const allPerms = rbac.getPermissionsForRole(userRole, SYSTEM_ROLES);
   console.log(`\nLista total de permisos para ${userRole}:`);
   console.log(allPerms.map(p => ` > ${p}`).join('\n'));
+  logger.info("🛡️ PRUEBA DE JERARQUÍA RBAC - KYCLOPS");
 }
 
 testRBAC();

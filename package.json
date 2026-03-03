@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc --noEmit && esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --drop:console --minify",
+    "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky"
   },
-  
   "keywords": [],
   "lint-staged": {
     "src/**/*.ts": [
@@ -25,6 +26,7 @@
     "@types/node": "^25.3.2",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
+    "esbuild": "^0.27.3",
     "eslint": "^10.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",

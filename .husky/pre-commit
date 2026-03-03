@@ -1,14 +1,10 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Obtener la rama actual
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
+# ... (el resto del script igual)
 if [ "$current_branch" = "main" ]; then
-  echo "🚫 [POLÍTICA DE SEGURIDAD] Rama MAIN detectada."
-  echo "🔍 Buscando console.log prohibidos..."
+  echo "🔍 Revisando calidad en MAIN..."
+  # Quitamos el bloqueo total, el build se encargará de la limpieza real
   npm run lint
 else
-  echo "⚠️ [MODO DESARROLLO] Rama $current_branch detectada. Logs permitidos."
   exit 0
 fi
