@@ -1,32 +1,37 @@
+import bcrypt from 'bcrypt'; 
 import { UserModel } from '../infrastructure/models/user.model.js';
 import type { User } from './user.entity.js';
 
 export class UserRepository {
-  /**
-   * Guarda o actualiza un usuario del dominio en la base de datos.
-   */
   async save(user: User): Promise<void> {
-    const profileData = user.profile; // Obtenemos el perfil real del cerebro
+    const profileData = user.profile;
+    
+    // 🛡️ Encriptamos aquí para evitar problemas con los hooks de Mongoose
+    const salt = await bcrypt.genSalt(10);
+    const encryptedPassword = await bcrypt.hash(user.passwordHash, salt);
 
     await UserModel.updateOne(
-      { email: user.email }, // Criterio de búsqueda
+      { email: user.email },
       { 
-        // No enviamos passwordHash aquí si ya existe, para no sobreescribir con texto plano
-        profile: {
-          firstName: profileData.firstName,
-          lastName: profileData.lastName,
-          phoneNumber: profileData.phoneNumber,
-          avatarUrl: profileData.avatarUrl
-        },
-        status: user.getStateName(),
-        role: 'SELLER' // Valor por defecto para Massive
+        $set: { 
+          email: user.email,
+          passwordHash: encryptedPassword, // Guardamos el hash real
+          profile: {
+            firstName: profileData.firstName,
+            lastName: profileData.lastName,
+            phoneNumber: profileData.phoneNumber,
+            avatarUrl: profileData.avatarUrl
+          },
+          status: user.getStateName(),
+          role: 'SELLER'
+        }
       },
-      { upsert: true } // Si no existe, lo crea. Si existe, lo actualiza.
+      { upsert: true }
     );
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    // Aquí luego implementaremos la lógica para convertir de DB a Clase User
+    const userDoc = await UserModel.findOne({ email });
     return null; 
   }
 }

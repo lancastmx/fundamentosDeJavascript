@@ -12,7 +12,6 @@ interface IUserDocument extends Document {
 const UserSchema = new Schema<IUserDocument>({
   email: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },
-  // Definimos la estructura interna para que no se guarden fuera
   profile: {
     firstName: { type: String },
     lastName: { type: String },
@@ -20,7 +19,7 @@ const UserSchema = new Schema<IUserDocument>({
     avatarUrl: { type: String }
   },
   role: { type: String, default: 'SELLER' }
-});
+}, { timestamps: true });
 
 UserSchema.pre<IUserDocument>('save', async function () {
   if (!this.isModified('passwordHash')) return;
