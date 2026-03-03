@@ -1,30 +1,37 @@
-import { User } from './modules/user/domain/user.entity.js';
-import { Organization } from './modules/organization/domain/organization.entity.js';
-import { Membership } from './modules/organization/domain/membership.entity.js';
+import { RegisterUserUseCase } from './modules/user/application/register-user.use-case.js';
+import { LoginUserUseCase } from './modules/user/application/login-user.use-case.js';
 
 async function bootstrap() {
-  console.log("🚀 KYCLOPS CORE: VALIDACIÓN DOMINIO SPRINT 2\n");
+  console.log("🚀 KYCLOPS OAUTH2 FLOW: REGISTRO Y LOGIN\n");
 
-  // 1. Instanciar y Activar Usuario
-  // Probamos que el State Pattern funciona (PENDING -> ACTIVE)
-  const user = new User("u-1", "admin@kyclops.com", "pass_hash");
-  user.activate();
+  const register = new RegisterUserUseCase();
+  const login = new LoginUserUseCase();
 
-  // 2. Crear Organización con el Plan Básico (Límite de 15)
-  const org = new Organization("o-1", "Kyclops Studio", user.id);
-  
-  // 3. Vincular con Membresía (RBAC inicial)
-  const membership = new Membership(user.id, org.id, "OWNER");
+  try {
+    // 1. REGISTRO (Creación de cuenta y empresa)
+    const regResult = await register.execute({
+      email: "lanca@kyclops.com",
+      passwordHash: "hash_seguro",
+      orgName: "Kyclops Studio"
+    });
+    console.log(`✅ Registro OK: Org "${regResult.organization.name}" creada.`);
 
-  // 4. PRUEBA DE FUEGO: Validación del Límite de 15
-  const invitacionesActuales = 0; // Simulamos que no hay nadie invitado
-  const puedeInvitar = org.canInvite(invitacionesActuales);
+    // 2. LOGIN (Obtención de Tokens)
+    const auth = await login.execute({
+      email: "lanca@kyclops.com",
+      passwordRaw: "password123"
+    });
 
-  console.log(`[SYSTEM] Usuario: ${user.email} está ${user.getStateName()}`);
-  console.log(`[SYSTEM] Org: ${org.name} | Plan: ${org.plan}`);
-  console.log(`[SYSTEM] ¿Permite invitaciones? ${puedeInvitar ? "SÍ (Límite de 15)" : "NO"}`);
-  
-  console.log("\n✅ Dominio verificado. Estructura lista para Sprint 3.");
+    console.log("\n🔑 TOKENS GENERADOS (OAuth2):");
+    console.log(` > AccessToken (JWT): ${auth.accessToken.substring(0, 20)}...`);
+    console.log(` > RefreshToken: ${auth.refreshToken}`);
+    console.log(` > Expira en: ${auth.expiresIn} segundos`);
+
+    console.log("\n✅ Flujo de Identidad completado con éxito.");
+
+  } catch (error: any) {
+    console.error("❌ Error en el flujo:", error.message);
+  }
 }
 
-bootstrap().catch((err) => console.error("❌ Fallo en el Core:", err.message));
+bootstrap();
