@@ -110,9 +110,9 @@ git checkout dev
 
 ```bash
 git add .
-git commit -m "feat: implement mongodb persistence with encrypted password and user profile"
+git commit -m "feat: complete sprint 5 with secure persistence, express and insomnia tests"
 git checkout dev
-git merge feature/sprint-4-mongodb-persistence --no-ff -m "feat: implement mongodb persistence with encrypted password and user profiles"
+git merge feature/sprint-5-express-api --no-ff -m "feat: complete sprint 5 with secure persistence, express and insomnia tests"
 git push
 git checkout main
 git rebase dev
