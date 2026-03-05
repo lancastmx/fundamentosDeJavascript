@@ -120,8 +120,3 @@ git push
 git checkout dev
 ```
 
-$ find . -type f \
- ! -path "_/node_modules/_" \
- ! -path "_/.git/_" \
- ! -path "_/.husky/_" \
- | sort

@@ -82,3 +82,5 @@ npm-debug.log
 .husky/_/
 .DS_Store
 dist/
+# Documentación y Notas
+docs/.obsidian/
